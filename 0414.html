@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    // 프로미스: 내용이 실행되었지만 아직 결과를 반환하지 않은 객체. 코드를 분리하여 나중에 실행한다는 개념.
+    // 나중에 .then을 붙여 결과를 반환
+
+    /*
+        promise 객체는 아래와 같은 문법으로 만듦
+        let promise = new Promise(function(resolve, reject) {
+            // executor
+        }
+
+        new Promise에 전달되는 함수는 executor(실행 함수)
+        실행 함수는 new Promise가 만들어질 때 자동으로 실행.
+        실행 함수의 파라미터 resolve와 reject는 js 자체 제공 콜백으로,
+        개발자는 resolve와 reject를 신경쓰지 않고 실행 함수 안 코드만 작성하면 됨
+        그 대신 실행 함수에서는 resolve나 reject 중 하나를 반드시 호출해야 함
+        resolve(value) - 일이 성공적으로 끝날 경우 그 결과를 나타내는 value와 함께 호출
+        reject(error) - 에러 발생 시 에러 객체를 나타내는 error와 함께 호출
+        실행 함수는 자동으로 실행되고, 처리가 끝나면 처리 성공 여부에 따라 resolve나 reject를 호출
+
+        new Promise 새엉자가 반환하는 promise 객체는 다음의 내부 프로퍼티를 가짐
+        state: 초기에는 pending(보류) 상태 - resolve 호출 시 fulfilled, reject 호출 시 rejected로 변함
+        result - 처음에는 undefined였다가 resolve(value) 호출 시 value로, reject(error) 호출 시 error로 변함
+     */
+
+   const condition = true;
+    const promise = new Promise(function(resolve, reject) {
+        setTimeout(() => resolve("성공"), 3000); // executor : new Promise에 의해 자동으로, 즉각적으로 호출
+    }); // 비동기 코드를 실행해두고(이떄promise 객체의 상태는 state: "pending", result: undefined에서)
+    //    state: "fulfilled" result:"성공"으로 변함
+
+    console.log('딴짓');
+    console.log('딴짓');
+    console.log('딴짓'); // 딴짓(?)을 하다가 then으로 결과를 반환
+
+    // then의 첫 번째 인수는 프로미스가 처리되었을 때 실행되는 함수이고, 실행 결과를 받음
+    // then의 두 번째 인수는 프로미스가 거부되었을 때 실행되는 함수이고, 에러를 받음
+    promise.then( // 프로미스가 처리되면 result 함수 실행, 거부되면 error 함수 실행
+        result => alert(result), error => alert(error)
+    )
+
+    const promise2 = new Promise((resolve, reject) => {
+        if(condition) { // condition이 참이라면 성공적으로 처리
+            resolve("성공");
+        }
+        else { // 처리 거부
+            reject("오류");
+        }
+    });
+
+    // 프로미스 소비 메소드: then, catch, finally
+    // then에서 작업이 성공적으로 처리된 경우만 다루고 싶다면 아래처럼 then에 인수를 하나만 전달
+    promise2.then((message) => {
+        console.log(message);
+    }) // 에러가 발생한 경우만 다루고 싶다면 .catch 사용
+        .catch((error) => { // 오류 발생 등으로 인해 처리가 거부될 경우 catch문 실행
+            console.error(error);
+        })
+        .finally(() => { // 프로미스 처리, 거부 여부와 상관없이 finally는 항상 실행
+            console.log("finally");
+        })
+
+</script>
+</body>
+</html>

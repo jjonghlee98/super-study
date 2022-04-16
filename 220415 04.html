@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    const promise = new Promise((resolve, reject) => {
+        resolve('ok');
+    }).then(result => { // then 핸들러 내에서도 에러 핸들링 가능
+        alert("result");
+        nonexist(); // 존재하지 않는 함수를 실행하려 함
+    }).catch(alert); // 위 핸들러에서 발생한 에러 처리
+</script>
+</body>
+</html>

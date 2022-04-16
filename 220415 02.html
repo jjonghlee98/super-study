@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    /*
+        프로미스 체이닝
+        순차적으로 처리해야 하는 비동기 작업이 여러 개 있다고 하면 어떻게 풀어낼 수 있을까?
+     */
+  const promise = new Promise((resolve, reject) => {
+    setTimeout(() => resolve(1), 1000); // 1초 후 첫 번째 프로미스 수행
+  }).then(function(result) { // 이후 첫 번째 then 핸들러 호출
+    alert(result);
+    return result * 3;
+  }).then(function(result) { // 앞 then의 반환값이 다음 then에 전달
+    alert(result);
+    return result * 4;
+  }).then(function(result) { // 같은 과정이 이어짐
+    alert(result);
+    return result * 5;
+  }) // alert 창에 세 차례 값이 순서대로 출력
+
+    // 프로미스 체이닝이 가능한 이유는 promise.then을 호출하면 프로미스가 반환되기 때문임
+    // 반환된 프로미스엔 .then을 호출할 수 있으며, then이 값을 반환할 때 이 값이 프로미스의 result가 됨
+    // 따라서 다음 then은 이 값을 이용해 호출출
+</cript>
+</body>
+</html>

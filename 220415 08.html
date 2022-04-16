@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    // function 앞에 async를 추가했을 시의 2가지 효과
+    // 1. 함수는 언제나 promise를 반환
+    // 2. 함수 안에서 await 사용 가능
+
+    async function f1() { // async가 붙은 함수는 반드시 프로미스를 반환
+        return Promise.resolve(1);
+    }
+    async function f2() { // 프로미스가 아닌 값을 반환하려 해도 resolved promise로 값을 감싸 수행된 프로미스가 반환되도록 함
+        return 2;
+    }
+
+    f1().then(alert); // 1 출력
+    f2().then(alert); // 2 출력
+
+    // await 문법은 async 함수 안에서만 동작
+    // await 키워드를 만나면 프로미스가 처리될 때까지 기다리고 결과를 그 이후 반환
+
+    async function f3() {
+        const promise = new Promise((resolve, reject) => {
+            setTimeout(() => resolve("완료"), 6000)
+        });
+
+        const result = await promise; // 프로미스가 처리될 때까지 기다림.
+        /* 함수 f3 본문이 실행되는 도중 윗줄에서 실행이 잠시 중단됐다가 프로미스가 처리되면 실행이 재개되며,
+        이떄 프로미스 객체의 result 값이 변수 result에 할당되므로 6초 뒤에 완료 출력
+         */
+
+        // 프로미스가 정상적으로 처리되면 await promise는 프로미스 객체의 result에 저장된 값을 반환
+        alert(result); // "완료"
+    }
+
+    f3();
+
+    async function f4() {
+        await Promise.reject(new Error("에러 발생"));
+    }
+    // 처리 완료 후 에러가 발생할 경우 예외 생성(프로미스가 거부되기 전에 약간의 시간이 지체되는 경우가 있음)
+
+    f4().catch(alert);
+</script>
+</body>
+</html>
